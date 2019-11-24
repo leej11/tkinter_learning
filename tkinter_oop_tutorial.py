@@ -31,12 +31,22 @@ class MainApplication(tk.Tk):
         frame = self.frames[cont]
         frame.tkraise() # Bring frame to the front of the window
 
+def quick_func(param):
+
+    print(param)
+
 class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Start Page", font=LARGE_FONT)
         label.grid(row=0, column=0)
+
+        button1 = tk.Button(self, text="Visit Page 1",
+                            command=lambda: quick_func("Say this word"))
+        button1.grid(row=0, column=1)
+
+
 
 # This first creates instance of the application, then .mainloop runs the application
 app = MainApplication()
