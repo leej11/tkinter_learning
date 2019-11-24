@@ -17,11 +17,10 @@ class MainApplication(tk.Tk):
 
         self.frames = {}
 
-        frame = StartPage(container, self)
-
-        self.frames[StartPage] = frame
-
-        frame.grid(row=0, column=0, sticky="nsew") # Sticky north south east west. So stretches in all directions
+        for F in (StartPage, PageOne, PageTwo):
+            frame = F(container, self)
+            self.frames[F] = frame
+            frame.grid(row=0, column=0, sticky="nsew") # Sticky north south east west. So stretches in all directions
 
         self.show_frame(StartPage)
 
@@ -43,11 +42,54 @@ class StartPage(tk.Frame):
         label.grid(row=0, column=0)
 
         button1 = tk.Button(self, text="Visit Page 1",
-                            command=lambda: quick_func("Say this word"))
-        button1.grid(row=0, column=1)
+                            command=lambda: controller.show_frame(PageOne))
 
+        button1.grid(row=1, column=0)
+
+        button2 = tk.Button(self, text="Back to Page Two",
+                            command=lambda: controller.show_frame(PageTwo))
+
+        button2.grid(row=2, column=0)
+
+
+class PageOne(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Page One", font=LARGE_FONT)
+        label.grid(row=0, column=0)
+
+        button1 = tk.Button(self, text="Back to home",
+                            command=lambda: controller.show_frame(StartPage))
+
+        button1.grid(row=1, column=0)
+
+        button2 = tk.Button(self, text="Back to Page Two",
+                            command=lambda: controller.show_frame(PageTwo))
+
+        button2.grid(row=2, column=0)
+
+
+class PageTwo(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Page Two", font=LARGE_FONT)
+        label.grid(row=0, column=0)
+
+        button1 = tk.Button(self, text="Back to home",
+                            command=lambda: controller.show_frame(StartPage))
+
+        button1.grid(row=1, column=0)
+
+        button2 = tk.Button(self, text="Back to Page One",
+                            command=lambda: controller.show_frame(PageOne))
+
+        button2.grid(row=2, column=0)
 
 
 # This first creates instance of the application, then .mainloop runs the application
 app = MainApplication()
 app.mainloop()
+https://youtu.be/jBUpjijYtCk?list=PLQVvvaa0QuDclKx-QpC9wntnURXVJqLyk&t=674
+
