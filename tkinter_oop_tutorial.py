@@ -1,4 +1,7 @@
 import tkinter as tk
+from tkinter import ttk # Kind of like the css for tkinter
+
+# Client icon needs to be 16 x 16 .png .bmp
 
 LARGE_FONT = ("Verdana", 12)
 
@@ -8,10 +11,12 @@ class MainApplication(tk.Tk):
     # When it initialises, create the frame and call the method to display it
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+
+        tk.Tk.iconbitmap(self, default="icon.ico") # Think it has to be .ico for an icon file
+        tk.Tk.wm_title(self, "Workout Logger")
+
         container = tk.Frame(self)
-
         container.pack(side="top", fill="both", expand=True)
-
         container.grid_rowconfigure(0, weight=1)  # The minimum size of the row
         container.grid_columnconfigure(0, weight=1)  # Minimum size of column. Weighting is priority.
 
@@ -38,17 +43,18 @@ class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Start Page", font=LARGE_FONT)
+
+
+        label = ttk.Label(self, text="Welcome to the Workout Logger! Select your workout.", font=LARGE_FONT)
         label.grid(row=0, column=0)
 
-        button1 = tk.Button(self, text="Visit Page 1",
+        button1 = ttk.Button(self, text="Chest & Triceps",
                             command=lambda: controller.show_frame(PageOne))
-
         button1.grid(row=1, column=0)
 
-        button2 = tk.Button(self, text="Back to Page Two",
-                            command=lambda: controller.show_frame(PageTwo))
 
+        button2 = ttk.Button(self, text="Back & Biceps",
+                            command=lambda: controller.show_frame(PageTwo))
         button2.grid(row=2, column=0)
 
 
@@ -56,15 +62,26 @@ class PageOne(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Page One", font=LARGE_FONT)
+
+        label = ttk.Label(self, text="Chest & Triceps Tracker", font=LARGE_FONT)
         label.grid(row=0, column=0)
 
-        button1 = tk.Button(self, text="Back to home",
+        self.exercise = ''
+
+        combobox1 = ttk.Combobox(self, textvariable=exercise)
+        combobox1['values'] = ("Tricep Pushdown",
+                           "Chest Press",
+                           "Tricep Extension",
+                           "Tricep Rope Pushdown",
+                           "Dumbbell Chest Press")
+        combobox1.grid(row=1, column=0)
+
+        button1 = ttk.Button(self, text="Back to home",
                             command=lambda: controller.show_frame(StartPage))
 
         button1.grid(row=1, column=0)
 
-        button2 = tk.Button(self, text="Back to Page Two",
+        button2 = ttk.Button(self, text="Back to Page Two",
                             command=lambda: controller.show_frame(PageTwo))
 
         button2.grid(row=2, column=0)
@@ -74,15 +91,15 @@ class PageTwo(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Page Two", font=LARGE_FONT)
+        label = ttk.Label(self, text="Page Two", font=LARGE_FONT)
         label.grid(row=0, column=0)
 
-        button1 = tk.Button(self, text="Back to home",
+        button1 = ttk.Button(self, text="Back to home",
                             command=lambda: controller.show_frame(StartPage))
 
         button1.grid(row=1, column=0)
 
-        button2 = tk.Button(self, text="Back to Page One",
+        button2 = ttk.Button(self, text="Back to Page One",
                             command=lambda: controller.show_frame(PageOne))
 
         button2.grid(row=2, column=0)
@@ -91,5 +108,4 @@ class PageTwo(tk.Frame):
 # This first creates instance of the application, then .mainloop runs the application
 app = MainApplication()
 app.mainloop()
-https://youtu.be/jBUpjijYtCk?list=PLQVvvaa0QuDclKx-QpC9wntnURXVJqLyk&t=674
 
