@@ -66,7 +66,7 @@ class PageOne(tk.Frame):
         label = ttk.Label(self, text="Chest & Triceps Tracker", font=LARGE_FONT)
         label.grid(row=0, column=0)
 
-        self.exercise = StringVar()
+        self.exercise = tk.StringVar(self)
         self.weight = ''
         self.reps = ''
         self.tick_status = ''
@@ -90,8 +90,8 @@ class PageOne(tk.Frame):
         button2.grid(row=2, column=3)
 
         # Exercise Selection
-        combobox1 = ttk.Combobox(self, command=lambda
-                                        arg1=self.exercise)textvariable=self.exercise)
+        combobox1 = ttk.Combobox(self, textvariable=self.exercise)
+
         combobox1['values'] = ("Tricep Pushdown",
                                "Chest Press",
                                "Tricep Extension",
@@ -112,7 +112,7 @@ class PageOne(tk.Frame):
 
         self.button1 = ttk.Checkbutton(self,
                                        command = lambda
-                                        arg1=self.exercise.get(), arg2=2, arg3=2:
+                                        arg1=self.exercise, arg2=2, arg3=2:
                                        self.buttonClick(arg1,arg2,arg3)
                                        )
 
