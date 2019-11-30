@@ -36,6 +36,12 @@ class MainApplication(tk.Tk):
         frame.tkraise() # Bring frame to the front of the window
 
 
+    def buttonClick(self, arg1, arg2, arg3):
+        print("You selected exercise: {}".format(arg1.get()))
+        print("At a weight of:  {}".format(arg2.get()))
+        print("For {} reps".format(arg3.get()))
+
+
 
 class StartPage(tk.Frame):
 
@@ -66,9 +72,9 @@ class PageOne(tk.Frame):
         label = ttk.Label(self, text="Chest & Triceps Tracker", font=LARGE_FONT)
         label.grid(row=0, column=0)
 
-        self.exercise = tk.StringVar(self)
-        self.weight = ''
-        self.reps = ''
+        self.exercise = tk.StringVar()
+        self.weight = tk.IntVar()
+        self.reps = tk.IntVar()
         self.tick_status = ''
 
         combobox1 = ttk.Combobox(self, textvariable=self.exercise)
@@ -92,6 +98,7 @@ class PageOne(tk.Frame):
         # Exercise Selection
         combobox1 = ttk.Combobox(self, textvariable=self.exercise)
 
+
         combobox1['values'] = ("Tricep Pushdown",
                                "Chest Press",
                                "Tricep Extension",
@@ -110,20 +117,18 @@ class PageOne(tk.Frame):
         # Submit button
         button_name = "Test submit"
 
-        self.button1 = ttk.Checkbutton(self,
+        self.button3 = ttk.Checkbutton(self,
                                        command = lambda
-                                        arg1=self.exercise, arg2=2, arg3=2:
-                                       self.buttonClick(arg1,arg2,arg3)
+                                        arg1 = self.exercise,
+                                        arg2 = self.weight,
+                                        arg3 = self.reps :
+                                        controller.buttonClick(arg1, arg2, arg3)
                                        )
 
-        self.button1.configure(text="submit???")
-        self.button1.grid(row=5, column=0)
+        self.button3.configure(text="submit???")
+        self.button3.grid(row=5, column=0)
 
-    def buttonClick(self, argument1, argument2, argument3):
 
-        print("You selected {}".format(argument1))
-        print("Weight of {}kg".format(argument2))
-        print("For {}".format(argument3))
 
 
 
