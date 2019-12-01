@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk # Kind of like the css for tkinter
+import sqlite3
+import datetime
 
 # Client icon needs to be 16 x 16 .png .bmp
 
@@ -14,6 +16,7 @@ class MainApplication(tk.Tk):
 
         tk.Tk.iconbitmap(self, default="icon.ico") # Think it has to be .ico for an icon file
         tk.Tk.wm_title(self, "Workout Logger")
+        tk.Tk.geometry(self, "500x300") # Control window size
 
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
@@ -40,6 +43,19 @@ class MainApplication(tk.Tk):
         print("You selected exercise: {}".format(arg1.get()))
         print("At a weight of:  {}".format(arg2.get()))
         print("For {} reps".format(arg3.get()))
+
+        con = sqlite3.connect('test.db', sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+        cur = con.cursor()
+        cur.execute("""INSERT INTO data (log_date, exercise, weight, reps) VALUES (?,?,?,?)""",
+                    (datetime.datetime.now().strftime('%Y-%m-%d %H-%M-%S'), arg1.get(), arg2.get(), arg3.get()))
+        con.commit()
+        print('Record inserted into database')
+
+    def clear_page(self):
+
+        frame = self.frames[cont]
+        frame.weightT.delete(0, 'end')
+        print("Clear weight entry box")
 
 
 
@@ -75,59 +91,76 @@ class PageOne(tk.Frame):
         self.exercise = tk.StringVar()
         self.weight = tk.IntVar()
         self.reps = tk.IntVar()
-        self.tick_status = ''
+        self.check_status = tk.BooleanVar()
 
+        # Row 1 Items (Label, Entry, Nav Button)
+
+        ## Label
+        label2 = ttk.Label(self, text="Select your exercise: ")
+        label2.grid(row=1, column=0)
+
+        ## Entry: Exercise Selection
         combobox1 = ttk.Combobox(self, textvariable=self.exercise)
         combobox1['values'] = ("Tricep Pushdown",
                            "Chest Press",
                            "Tricep Extension",
                            "Tricep Rope Pushdown",
                            "Dumbbell Chest Press")
+        combobox1.grid(row=1, column=1)
 
-        combobox1.grid(row=1, column=0)
-
-        # Navigation buttons
-        button1 = ttk.Button(self, text="Back to home",
+        ## Navigation: Back to home
+        nav_home = ttk.Button(self, text="Back to home",
                             command=lambda: controller.show_frame(StartPage))
-        button1.grid(row=1, column=3)
-
-        button2 = ttk.Button(self, text="Back to Page Two",
-                            command=lambda: controller.show_frame(PageTwo))
-        button2.grid(row=2, column=3)
-
-        # Exercise Selection
-        combobox1 = ttk.Combobox(self, textvariable=self.exercise)
+        nav_home.grid(row=1, column=2)
 
 
-        combobox1['values'] = ("Tricep Pushdown",
-                               "Chest Press",
-                               "Tricep Extension",
-                               "Tricep Rope Pushdown",
-                               "Dumbbell Chest Press")
-        combobox1.grid(row=1, column=0)
+
+
 
         # Weight Entry
+
+        ## Label
+        label_weight = ttk.Label(self, text="Weight (kg) : ")
+        label_weight.grid(row=2, column=0)
+
         weightT = ttk.Entry(self, width=10, textvariable=self.weight)
-        weightT.grid(row=2, column=0)
+        weightT.grid(row=2, column=1)
+
+        nav_p2 = ttk.Button(self, text="Back to Page Two",
+                             command=lambda: controller.show_frame(PageTwo))
+        nav_p2.grid(row=2, column=2)
+
+
 
         # Reps Entry
+
+        ## Label
+        label_reps = ttk.Label(self, text="Number of Reps: ")
+        label_reps.grid(row=3, column=0)
+
         repsT = ttk.Entry(self, width=10, textvariable=self.reps)
-        repsT.grid(row=3, column=0)
+        repsT.grid(row=3, column=1)
 
         # Submit button
-        button_name = "Test submit"
 
-        self.button3 = ttk.Checkbutton(self,
-                                       command = lambda
-                                        arg1 = self.exercise,
-                                        arg2 = self.weight,
-                                        arg3 = self.reps :
-                                        controller.buttonClick(arg1, arg2, arg3)
+        self.button_submit = ttk.Checkbutton(self,
+                                             var=self.check_status,
+                                            command = lambda
+                                            arg1 = self.exercise,
+                                            arg2 = self.weight,
+                                            arg3 = self.reps :
+                                            controller.buttonClick(arg1, arg2, arg3)
                                        )
 
-        self.button3.configure(text="submit???")
-        self.button3.grid(row=5, column=0)
+        self.button_submit.configure(text="Submit")
+        self.button_submit.grid(row=5, column=2)
 
+
+        # Clear button
+
+        self.clear_button = ttk.Button(self, text="Clear Entry",
+                                       command=lambda: parent.clear_page())
+        self.clear_button.grid(row=6, column=2)
 
 
 
